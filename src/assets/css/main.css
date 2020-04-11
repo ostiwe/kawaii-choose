@@ -1,0 +1,133 @@
+.arts-grid__wrapper {
+  margin: 0 auto;
+}
+.arts-grid__item {
+  height: auto !important;
+}
+
+.home-card {
+  width: 200px;
+  height: 350px;
+}
+
+.cart-with-controls {
+  position: relative;
+  overflow: hidden;
+  z-index: 999999;
+}
+
+.cart-controls {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 5px;
+  color: white;
+  z-index: 99999999;
+  /*background-color: aqua;*/
+}
+
+.home-card__image {
+  background-position: center;
+  background-size: cover;
+  border-radius: inherit;
+}
+
+.Card {
+  overflow: hidden;
+}
+
+.cardScroll-home > .HorizontalScroll > .HorizontalScroll__in > .CardScroll__in {
+  padding: 10px 0;
+}
+
+.home-card__show-more {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.home-card__show-more > div {
+  margin-bottom: 10px;
+}
+
+.promote-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15pt;
+  height: 250px;
+}
+
+.Card:nth-child(2n+1) {
+  margin-left: 0 !important;
+}
+
+.cart-controls {
+  display: flex;
+  padding: 5px 10px;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  color: #99A2AD;
+  background-color: var(--content_tint_background);
+}
+
+.cart-controls > * {
+  margin-right: 20px;
+}
+
+.cards-grid {
+  padding-bottom: 20px;
+  margin: 0 auto;
+}
+.cards-grid__item {
+  width: 300px;
+  margin-bottom: 20px;
+}
+
+.CardGrid .Card {
+  margin-bottom: 10px;
+}
+
+.normalize-text {
+  white-space: normal;
+}
+
+.banner {
+  position: absolute;
+  bottom: 0;
+}
+
+#error_page > .Panel__in > .Separator {
+  display: none;
+}
+
+.progressWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.progressItem-progress {
+  width: 100%;
+  padding: 0 20px 0 20px;
+}
+
+.Header__in {
+  align-items: center;
+}
+
+.bug-tag {
+  display: block;
+  padding: 5px;
+  color: var(--text_primary);
+  background-color: var(--content_tint_background);
+  max-width: 100px;
+  text-align: center;
+  border-radius: 10px;
+}
+
+.bug-fixed {
+  color: white;
+  background-color: var(--button_commerce_background);
+}
+
+/*# sourceMappingURL=main.css.map */
