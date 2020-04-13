@@ -7,6 +7,7 @@ import App from "./App";
 import {Provider} from "react-redux";
 import store from "./redux/store";
 import * as Sentry from '@sentry/browser'
+import {ConfigProvider} from "@vkontakte/vkui";
 // import {ConfigProvider} from "@vkontakte/vkui";
 
 // Init VK  Mini App

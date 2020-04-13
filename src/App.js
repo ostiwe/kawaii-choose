@@ -57,7 +57,6 @@ class App extends React.Component {
                 if (data.appearance === 'light') appearance = 'dark'; else appearance = 'light';
                 setTimeout(() => this.setAppearance(appearance), 500);
 
-
                 document.body.attributes.setNamedItem(schemeAttribute);
             }
         });
@@ -69,6 +68,7 @@ class App extends React.Component {
         apiSender.sendTest().then(response => {
             if (response.status !== 'error') {
                 bridge.send('VKWebAppGetUserInfo').then(user => {
+                    this.sendHello(user);
                     this.setState({fetchedUser: user},
                         () => this.setState({load: null, activePanel: 'home'}));
 
@@ -129,10 +129,12 @@ class App extends React.Component {
     changeBugTitle = (e) => {
         this.props.dispatch(setBugTitle(e.target.value));
     };
+
     changeBugSubTitle = (e) => {
         this.props.dispatch(setBugSubTitle(e.target.value));
 
     };
+
     sendBugReport = () => {
         return new Promise((resolve, reject) => {
             const {bug_title, bug_subtitle} = this.props.appReducer;
@@ -145,6 +147,19 @@ class App extends React.Component {
                 resolve(response);
             }).catch(reason => reject(reason));
         });
+    };
+
+    sendHello = (user) => {
+        let xr = new XMLHttpRequest(),
+            body = JSON.stringify({user_id: user.id});
+        console.log(user,body)
+        xr.open('POST', 'https://api.ostiwe.ru/kawaii/hello');
+        xr.setRequestHeader('Content-type', 'application/json');
+        xr.send(body);
+        xr.onload = function () {
+            console.log(xr.response);
+        }
+
     };
 
     render() {
@@ -170,6 +185,7 @@ class App extends React.Component {
                                        changeBugTitle={this.changeBugTitle}
                                        changeBugSubTitle={this.changeBugSubTitle}
                                        sendBugReport={this.sendBugReport}
+                                       fetchedUser={this.state.fetchedUser}
                   >
                   </AppModalRoot>}>
                 <Profile id={'user_profile'} setActiveModal={this.setActiveUserProfileModal}
