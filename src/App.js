@@ -82,7 +82,8 @@ class App extends React.Component {
 
     setAppearance = (appearance) => {
         bridge.send("VKWebAppSetViewSettings",
-            {"status_bar_style": appearance}).catch(reason =>{});
+            {"status_bar_style": appearance}).catch(reason => {
+        });
     };
 
     go = e => {
@@ -152,13 +153,9 @@ class App extends React.Component {
     sendHello = (user) => {
         let xr = new XMLHttpRequest(),
             body = JSON.stringify({user_id: user.id});
-        console.log(user,body)
         xr.open('POST', 'https://api.ostiwe.ru/kawaii/hello');
         xr.setRequestHeader('Content-type', 'application/json');
         xr.send(body);
-        xr.onload = function () {
-            console.log(xr.response);
-        }
 
     };
 

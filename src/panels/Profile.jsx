@@ -1,5 +1,5 @@
 import React from "react";
-import {Group, Header, Panel, PanelHeaderSimple, List, Cell, InfoRow, Progress} from "@vkontakte/vkui";
+import {Group, Header, Panel, PanelHeaderSimple, List, Cell, InfoRow, Progress, Footer} from "@vkontakte/vkui";
 import Icon28HelpOutline from '@vkontakte/icons/dist/28/help_outline';
 import Icon28BugOutline from '@vkontakte/icons/dist/28/bug_outline';
 import Icon28PaletteOutline from '@vkontakte/icons/dist/28/palette_outline';
@@ -76,6 +76,7 @@ class Profile extends React.Component {
                               before={<Icon28PaletteOutline/>}>Управление артами</Cell>
                     </List>
                 </Group>
+                <Footer>134.2130v</Footer>
             </Panel>
         )
     }
