@@ -103,7 +103,7 @@ class Arts extends React.Component {
                     >
                         <div className={'cards-grid'}>
                             <Masonry className={'arts-grid__wrapper'} options={{
-                                columnWidth: 300,
+                                columnWidth: 360,
                                 itemSelector: '.cards-grid__item',
                                 percentPosition: true,
                                 fitWidth: true,

@@ -82,7 +82,7 @@ class App extends React.Component {
 
     setAppearance = (appearance) => {
         bridge.send("VKWebAppSetViewSettings",
-            {"status_bar_style": appearance});
+            {"status_bar_style": appearance}).catch(reason =>{});
     };
 
     go = e => {

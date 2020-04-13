@@ -69,7 +69,7 @@ class Profile extends React.Component {
                         <Cell expandable onClick={go} data-to={'bugs'} before={<Icon28BugOutline/>}>Сообщить о
                             баге</Cell>
                         <Cell expandable onClick={go} data-to={'help'} before={<Icon28HelpOutline/>}>Помощь</Cell>
-                        <Cell expandable onClick={user_info && !user_info.creator ? () => {
+                        <Cell expandable onClick={user_info && parseInt(user_info.creator) === 0 ? () => {
                             setActiveModal('add_art_denied')
                         } : go}
                               data-to={'add_art'}
