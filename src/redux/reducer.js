@@ -10,6 +10,8 @@ const initialState = {
     bug_title: '',
     bug_subtitle: '',
     bug_info: null,
+    create_post_categories: [],
+    create_post_file: null,
 
 };
 
@@ -56,6 +58,16 @@ export function appReducer(state = initialState, action) {
                 ...state,
                 bug_info: action.payload
             };
+        case "CREATE_POST_SET_CATEGORIES":
+            return {
+                ...state,
+                create_post_categories: action.payload
+            }
+        case "CREATE_POST_SET_FILE":
+            return {
+                ...state,
+                create_post_file: action.payload
+            }
         default:
             return state;
     }

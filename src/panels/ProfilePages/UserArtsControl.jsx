@@ -24,7 +24,7 @@ class UserArtsControl extends React.Component {
             </Group>
             <Group>
                 <List>
-                    <Cell>sds</Cell>
+
                 </List>
             </Group>
         </Panel>

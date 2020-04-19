@@ -51,5 +51,18 @@ export function setBugInfo(bugInfo) {
         type: 'SET_BUG_INFO',
         payload: bugInfo
     }
+}
 
+export function setPostCategories(categories) {
+    return {
+        type: 'CREATE_POST_SET_CATEGORIES',
+        payload: categories
+    }
+}
+
+export function setCreatePostFile(file) {
+    return {
+        type: 'CREATE_POST_SET_FILE',
+        payload: file,
+    }
 }

@@ -14,6 +14,7 @@ import {ConfigProvider} from "@vkontakte/vkui";
 bridge.send("VKWebAppInit");
 Sentry.init({dsn: "https://68793bc3706341008cb486547c2ec117@o376479.ingest.sentry.io/5197343"});
 
+
 ReactDOM.render(<Provider store={store}>
     <App/>
 </Provider>, document.getElementById("root"));

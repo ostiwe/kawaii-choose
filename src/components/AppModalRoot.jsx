@@ -9,6 +9,7 @@ import Icon28PrivacyOutline from '@vkontakte/icons/dist/28/privacy_outline';
 import IconCoolEmoji from '../img/cool-emoji.png';
 import CreatePostModal from "./CreatePostModal";
 import * as Sentry from "@sentry/browser";
+import CreatePostsCategoriesSelectModal from "./CreatePostsCategoriesSelectModal";
 
 function goToPublicMessages() {
     let link = document.createElement('a');
@@ -54,20 +55,6 @@ export default function ({
                        title: 'Создать тут', mode: 'primary',
                        action: () => {
                            setActiveUserProfileModal("bug_sender");
-                           // Sentry.showReportDialog({
-                           //     dsn: 'https://68793bc3706341008cb486547c2ec117@o376479.ingest.sentry.io/5197343',
-                           //     user: {
-                           //         name: `${fetchedUser.first_name} ${fetchedUser.last_name}`,
-                           //     },
-                           //     labelName: 'Ваше имя',
-                           //     labelClose: 'Закрыть',
-                           //     labelSubmit: 'Отправить',
-                           //     labelEmail: 'Ваша почта',
-                           //     labelComments: 'Что произошло?',
-                           //     title: 'Сообщить о баге в приложении',
-                           //     subtitle: 'Будем признательны, если сообщите о найденом баге в нашем приложении',
-                           //     subtitle2: '',
-                           // });
                        }
                    }, {
                        title: 'К разработчику!', mode: 'secondary',
@@ -112,5 +99,7 @@ export default function ({
                                changeBugSubTitle={changeBugSubTitle}
                                sendBugReport={sendBugReport}/>
         <CreatePostModal id={'create_post'} setActiveUserProfileModal={setActiveUserProfileModal}/>
+        <CreatePostsCategoriesSelectModal id={'create_post_categories'}
+                                          setActiveUserProfileModal={setActiveUserProfileModal}/>
     </ModalRoot>;
 }

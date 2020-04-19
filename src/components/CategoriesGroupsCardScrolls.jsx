@@ -49,6 +49,7 @@ const CategoriesGroupCardScrolls = ({
                                                         onClick={() => postAction(index, category.id)}/>
                                         }
                                         <Icon24Fullscreen onClick={() => openImage(item.local_filename)}/>
+                                        {process.env.NODE_ENV === "development" && item.postid}
                                     </div>
                                 </Card>
                         })}

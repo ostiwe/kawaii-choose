@@ -1,5 +1,10 @@
 import React from "react";
-import {Checkbox, FormLayout, Input, ModalPage, ModalPageHeader, Select} from "@vkontakte/vkui";
+import {Button, Div, File, FormLayout, ModalPage, ModalPageHeader, Progress} from "@vkontakte/vkui";
+import API from "../utils/API";
+import {connect} from "react-redux";
+import {setCreatePostFile} from "../redux/actions";
+
+const apiSender = new API();
 
 class CreatePostModal extends React.Component {
     constructor(props) {
@@ -7,36 +12,68 @@ class CreatePostModal extends React.Component {
         this.state = {
             tagsInput: '',
             tags: [],
+            file: null,
+            loading: false,
+            uploadProgress: 0,
+
         }
     }
 
-    changeInput = (e) => {
-        let tagsInput = e.target.value.replace(/\s/g, '');
-        let tagsList = tagsInput.split(',');
-        this.setState({tags: tagsList, tagsInput: tagsInput});
-        console.log(tagsList);
-    }
-    changeSelect = (e) => {
-        console.log(e.target.value);
+
+    changeFile = (e) => {
+        this.props.dispatch(setCreatePostFile(e.target.files[0]))
     }
 
+    createPost = () => {
+        apiSender.fileUploader(this.props.appReducer.create_post_file, this.props.appReducer.create_post_categories, this.props.appReducer.user_info.id)
+            .catch(reason => {
+                console.log(reason);
+            })
+            .then(response => {
+                console.log(response);
+            })
+    }
+
+
     render() {
-        const {setActiveUserProfileModal, id} = this.props;
-        const {tagsInput} = this.state;
+        const {setActiveUserProfileModal, id, appReducer} = this.props;
+        const {loading, uploadProgress, file} = this.state;
         return <ModalPage id={id} dynamicContentHeight={true} onClose={() => {
             setActiveUserProfileModal(null)
         }}
                           header={<ModalPageHeader>Создать пост</ModalPageHeader>}
         >
-            <FormLayout>
-                <Input type={'text'} top={'Введите теги которые вы хотите добавить к своему арту'} value={tagsInput}
-                       onChange={this.changeInput}/>
-                       <Checkbox>dsls</Checkbox>
-                       <Checkbox>d22</Checkbox>
-                       <Checkbox>xx</Checkbox>
-            </FormLayout>
+            <Button onClick={() => {
+                this.setState({loading: !loading})
+                console.log(appReducer);
+            }}>change load</Button>
+            {!loading ?
+                <FormLayout>
+
+                    <Button onClick={() => {
+                        setActiveUserProfileModal('create_post_categories')
+                    }}>{appReducer.create_post_categories.length === 0 ? "Выбрать категории" : "Выбрано категорий - " + appReducer.create_post_categories.length}</Button>
+                    <File accept={'.jpg,.png,.jpeg'}
+                          onChange={this.changeFile}>{appReducer.create_post_file === null ? 'Выбрать файл' : "Файл выбран"}</File>
+
+                    <Button
+                        disabled={appReducer.create_post_file === null ? true : appReducer.create_post_categories.length === 0}
+                        onClick={this.createPost}>
+                        {appReducer.create_post_categories.length !== 0 && appReducer.create_post_file !== null ? "Создать пост" : "Нужно выбрать файл и категории"}
+                    </Button>
+                </FormLayout>
+                : <FormLayout>
+                    <Div>
+                        <p>Создаем пост...</p>
+                        <Progress value={30}/>
+                    </Div>
+                </FormLayout>}
         </ModalPage>
     }
 }
 
-export default CreatePostModal;
+function stateToProps(state) {
+    return state
+}
+
+export default connect(stateToProps)(CreatePostModal);
