@@ -1,8 +1,8 @@
 import React from "react";
-import {Button, Div, File, FormLayout, ModalPage, ModalPageHeader, Progress} from "@vkontakte/vkui";
+import {Button, Div, File, FormLayout, ModalPage, ModalPageHeader, Spinner} from "@vkontakte/vkui";
 import API from "../utils/API";
 import {connect} from "react-redux";
-import {setCreatePostFile} from "../redux/actions";
+import {clearCreatePost, setCreatePostFile} from "../redux/actions";
 
 const apiSender = new API();
 
@@ -25,28 +25,30 @@ class CreatePostModal extends React.Component {
     }
 
     createPost = () => {
+        this.setState({loading: true});
         apiSender.fileUploader(this.props.appReducer.create_post_file, this.props.appReducer.create_post_categories, this.props.appReducer.user_info.id)
             .catch(reason => {
                 console.log(reason);
+                this.setState({loading: false});
             })
             .then(response => {
-                console.log(response);
+                if (response.upload_status === 'success') {
+                    this.props.dispatch(clearCreatePost())
+                    this.props.setActiveUserProfileModal('success_create_post')
+                }
+                this.setState({loading: false});
             })
     }
 
 
     render() {
         const {setActiveUserProfileModal, id, appReducer} = this.props;
-        const {loading, uploadProgress, file} = this.state;
+        const {loading} = this.state;
         return <ModalPage id={id} dynamicContentHeight={true} onClose={() => {
             setActiveUserProfileModal(null)
         }}
                           header={<ModalPageHeader>Создать пост</ModalPageHeader>}
         >
-            <Button onClick={() => {
-                this.setState({loading: !loading})
-                console.log(appReducer);
-            }}>change load</Button>
             {!loading ?
                 <FormLayout>
 
@@ -64,8 +66,7 @@ class CreatePostModal extends React.Component {
                 </FormLayout>
                 : <FormLayout>
                     <Div>
-                        <p>Создаем пост...</p>
-                        <Progress value={30}/>
+                        <Spinner/>
                     </Div>
                 </FormLayout>}
         </ModalPage>

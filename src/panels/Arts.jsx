@@ -1,28 +1,20 @@
 import React from "react";
-import {
-    Button,
-    Card,
-    CardGrid,
-    Group,
-    IOS,
-    Panel,
-    PanelHeaderSimple,
-    Placeholder,
-    platform,
-    Spinner
-} from "@vkontakte/vkui";
+import {Button, Card, Group, IOS, Panel, PanelHeaderSimple, Placeholder, platform, Spinner} from "@vkontakte/vkui";
 import PanelHeaderButton from "@vkontakte/vkui/dist/components/PanelHeaderButton/PanelHeaderButton";
+
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
 import Icon24Back from '@vkontakte/icons/dist/24/back';
-
 import Icon24LikeOutline from '@vkontakte/icons/dist/24/like_outline';
 import Icon24Like from '@vkontakte/icons/dist/24/like';
 import Icon24Fullscreen from '@vkontakte/icons/dist/24/fullscreen';
 import emptyImage from "../img/empty.png";
+
 import API from "../utils/API";
 import bridge from "@vkontakte/vk-bridge";
 import InfiniteScroll from "react-infinite-scroll-component";
-import Masonry from "react-masonry-component";
+import Masonry from "masonry-layout";
+import * as ImagesLoaded from '../utils/imagesLoaded';
+import {connect} from "react-redux";
 
 const osName = platform();
 const apiSender = new API();
@@ -35,6 +27,8 @@ class Arts extends React.Component {
             page: 1,
             hasMoreImages: true,
         }
+        this.imagesGrid = null;
+
     }
 
     postAction = (postIndex) => {
@@ -53,6 +47,27 @@ class Arts extends React.Component {
 
     componentDidMount() {
         this.loadImages();
+
+
+        let grid = this.imagesGrid;
+        let masonry = new Masonry(grid, {
+            // columnWidth: 90,
+            itemSelector: '.cards-grid__item',
+            percentPosition: false,
+            fitWidth: true,
+            gutter: 10,
+            resize: false,
+            transitionDuration: 0,
+            horizontalOrder: true,
+        })
+
+        let imgLoad = ImagesLoaded(grid, {
+            background: true
+        });
+
+        imgLoad.on('done', function () {
+            masonry.layout();
+        });
     }
 
     componentWillUnmount() {
@@ -82,8 +97,18 @@ class Arts extends React.Component {
         );
     };
 
+    imageLoaded = (imageElement) => {
+        let parent = imageElement.target.parentNode.parentNode.parentNode;
+        setTimeout(() => {
+            parent.classList.remove("image-loading")
+            parent.classList.add("image-loaded")
+        }, 300);
+
+    }
+
     render() {
-        const {id, go, artsInfo, openImage, snackBar} = this.props;
+        const {id, go, artsInfo, openImage, snackBar, thumbsNeed} = this.props;
+
         return (
             <Panel separator={false} id={id}>
                 <PanelHeaderSimple left={<PanelHeaderButton onClick={go} data-to="home">
@@ -102,21 +127,18 @@ class Arts extends React.Component {
                         scrollThreshold={"850px"}
                     >
                         <div className={'cards-grid'}>
-                            <Masonry className={'arts-grid__wrapper'} options={{
-                                columnWidth: 360,
-                                itemSelector: '.cards-grid__item',
-                                percentPosition: true,
-                                fitWidth: true,
-                                // resize: true,
-                                transitionDuration: 0,
-                                horizontalOrder: true
-                            }}>
-                                {this.state.images.length > 0 ? this.state.images.map((value, index) => <Card
-                                        mode={'shadow'} key={index}
-                                        className={'cards-grid__item'}>
-                                        <div className={'arts-grid arts-grid__item home-card__image cart-with-controls'}>
-                                            <img width={'100%'}
-                                                 src={`https://api.ostiwe.ru/file/${value.file_uid}?thumb=1`}/>
+                            <div ref={(c) => this.imagesGrid = c} className={'arts-grid__wrapper'}>
+                                {this.state.images.length > 0 ? this.state.images.map((value, index) =>
+                                        <Card
+                                            mode={'shadow'} key={index}
+                                            className={'cards-grid__item image-loading'}
+                                        >
+                                            <div
+                                                className={'arts-grid arts-grid__item home-card__image cart-with-controls'}>
+                                                <img alt={'kawaii app image ' + value.file_uid} width={'100%'}
+                                                     height={'100%'} onLoad={this.imageLoaded}
+                                                     src={`https://api.ostiwe.ru/file/${value.file_uid}?thumb=${thumbsNeed}`}/>
+                                            </div>
                                             <div className="cart-controls">
                                                 {!this.state.images[index].liked ?
                                                     <Icon24LikeOutline onClick={() => this.postAction(index)}/>
@@ -127,13 +149,12 @@ class Arts extends React.Component {
 
                                                 <Icon24Fullscreen onClick={() => openImage(value.file_uid)}/>
                                             </div>
-                                        </div>
-                                    </Card>) :
+                                        </Card>) :
                                     <Placeholder header={'Тут пусто'}
                                                  icon={<img alt={'empty_img'} width={250} src={emptyImage}/>}
                                                  stretched
                                                  action={<Button onClick={go} data-to={'home'}>Назад</Button>}/>}
-                            </Masonry>
+                            </div>
                         </div>
                     </InfiniteScroll>
 
@@ -145,4 +166,8 @@ class Arts extends React.Component {
     }
 }
 
-export default Arts;
+function toProps(state) {
+    return state
+}
+
+export default connect(toProps)(Arts);

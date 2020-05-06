@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import Panel from '@vkontakte/vkui/dist/components/Panel/Panel';
 import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
-import Div from '@vkontakte/vkui/dist/components/Div/Div';
-import {Card, CardScroll, Header, PanelHeaderSimple} from "@vkontakte/vkui";
+import {PanelHeaderSimple} from "@vkontakte/vkui";
 
 import API from "../utils/API";
 import bridge from "@vkontakte/vk-bridge";
@@ -81,7 +80,7 @@ class Home extends React.Component {
     }
 
     render() {
-        const {fetchedUser, id, changePanel, openImage, snackBar} = this.props;
+        const {fetchedUser, id, changePanel, openImage, snackBar,thumbsNeed} = this.props;
         const {artsList, categories} = this.state;
 
         return <Panel separator={false} id={id}>
@@ -99,36 +98,10 @@ class Home extends React.Component {
                 </Cell>
             </Group>}
 
-            <CategoriesGroupCardScrolls postAction={this.postAction} openImage={openImage}
+            <CategoriesGroupCardScrolls thumbsNeed={thumbsNeed} postAction={this.postAction} openImage={openImage}
                                         changePanel={changePanel} artsList={artsList} categories={categories}/>
 
-            <Group header={<Header mode={'secondary'}>
-                Скоро</Header>}>
-                <Div>
-                    <CardScroll>
-                        <Card size={'l'}>
-                            <div className="promote-card">
-                                В будущем вас ждут
-                            </div>
-                        </Card>
-                        <Card size={'l'}>
-                            <div className="promote-card">
-                                Арты по разным категориям
-                            </div>
-                        </Card>
-                        <Card size={'l'}>
-                            <div className="promote-card">
-                                Арты по тайтлам
-                            </div>
-                        </Card>
-                        <Card size={'l'}>
-                            <div className="promote-card">
-                                Арты по персонажам
-                            </div>
-                        </Card>
-                    </CardScroll>
-                </Div>
-            </Group>
+
             {snackBar}
         </Panel>
     }

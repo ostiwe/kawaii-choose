@@ -66,3 +66,16 @@ export function setCreatePostFile(file) {
         payload: file,
     }
 }
+
+export function clearCreatePost() {
+    return {
+        type: 'CREATE_POST_CLEAR',
+    }
+}
+
+export function changeThumbsSettings(thumbsNeed) {
+    return {
+        type: 'CHANGE_SETTINGS_THUMBS',
+        payload: thumbsNeed
+    }
+}

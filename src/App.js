@@ -19,11 +19,12 @@ import Home from './panels/Home.jsx';
 import Arts from "./panels/Arts";
 import Loader from "./panels/Loader";
 
-import {setBugSubTitle, setBugTitle, setUserInfo} from "./redux/actions";
+import {changeThumbsSettings, setBugSubTitle, setBugTitle, setUserInfo} from "./redux/actions";
 import EpicTabbar from "./components/EpicTabbar";
 import AppModalRoot from "./components/AppModalRoot";
 import BugInfo from "./panels/ProfilePages/BugInfo";
 import UserArtsControl from "./panels/ProfilePages/UserArtsControl";
+import Settings from "./panels/Settings";
 
 
 const apiSender = new API();
@@ -61,6 +62,19 @@ class App extends React.Component {
             }
         });
 
+        bridge.send("VKWebAppStorageGet", {"keys": ["thumbs"]}).then(response => {
+            if (response.keys[0].value === false) {
+                this.props.dispatch(changeThumbsSettings(1));
+                bridge.send("VKWebAppStorageSet", {"key": "thumbs", "value": '1'});
+
+            } else {
+                this.props.dispatch(changeThumbsSettings(Number.parseInt(response.keys[0].value)));
+
+            }
+        }).catch(reason => {
+            console.error(reason);
+        })
+
         this.fetchData();
     }
 
@@ -83,6 +97,7 @@ class App extends React.Component {
     setAppearance = (appearance) => {
         bridge.send("VKWebAppSetViewSettings",
             {"status_bar_style": appearance}).catch(reason => {
+                console.error(reason)
         });
     };
 
@@ -115,6 +130,7 @@ class App extends React.Component {
                 `https://api.ostiwe.ru/file/${image_uid}`
             ]
         }).catch(reason => {
+            console.log(reason)
             this.setState({
                 snackBar:
                     <Snackbar
@@ -160,22 +176,36 @@ class App extends React.Component {
     };
 
     render() {
+        const {settings} = this.props.appReducer;
+
         return <Epic activeStory={this.state.activeStory}
                      tabbar={(this.state.activePanel === 'home' || this.state.activePanel === 'user_profile') &&
                      <EpicTabbar activeStory={this.state.activeStory} onStoryChange={this.onStoryChange}/>}>
 
-            <View header={false} id={'basic'} activePanel={this.state.activePanel} popout={this.state.load}>
-                <Home id='home' s={this.setAppearance} fetchedUser={this.state.fetchedUser}
+            <View header={false} id={'basic'} activePanel={this.state.activePanel} popout={this.state.load}
+                  modal={<AppModalRoot activeProfileModal={this.state.activeProfileModal}
+                                       setActiveUserProfileModal={this.setActiveUserProfileModal}
+                                       changeBugTitle={this.changeBugTitle}
+                                       changeBugSubTitle={this.changeBugSubTitle}
+                                       sendBugReport={this.sendBugReport}
+                                       fetchedUser={this.state.fetchedUser}
+                  />}>
+                <Home id='home' thumbsNeed={settings.thumbs} s={this.setAppearance}
+                      fetchedUser={this.state.fetchedUser}
                       changePanel={this.changePanel} go={this.go} openImage={this.openImage}
                       snackBar={this.state.snackBar}/>
-                <Arts id={'arts'} artsInfo={this.state.artsInfo}
+
+                <Arts id={'arts'} thumbsNeed={settings.thumbs} setActiveModal={this.setActiveUserProfileModal}
+                      artsInfo={this.state.artsInfo}
                       fetchedUser={this.state.fetchedUser} changePanel={this.changePanel}
                       openImage={this.openImage}
                       snackBar={this.state.snackBar}
                       go={this.go}/>
+
                 <Loader id={'loader'}/>
                 <Error id={'error_page'}/>
             </View>
+
             <View header={false} id={'profile'} activePanel={this.state.activePanel}
                   modal={<AppModalRoot activeProfileModal={this.state.activeProfileModal}
                                        setActiveUserProfileModal={this.setActiveUserProfileModal}
@@ -183,8 +213,7 @@ class App extends React.Component {
                                        changeBugSubTitle={this.changeBugSubTitle}
                                        sendBugReport={this.sendBugReport}
                                        fetchedUser={this.state.fetchedUser}
-                  >
-                  </AppModalRoot>}>
+                  />}>
                 <Profile id={'user_profile'} setActiveModal={this.setActiveUserProfileModal}
                          fetchedUser={this.state.fetchedUser} go={this.go}/>
                 <Bugs id={'bugs'} go={this.go} changePanel={this.changePanel}
@@ -193,6 +222,8 @@ class App extends React.Component {
                 <BugInfo id={'bug_info'} go={this.go}
                          setActiveModal={this.setActiveUserProfileModal}/>
                 <UserArtsControl id={'add_art'} go={this.go} setActiveModal={this.setActiveUserProfileModal}/>
+                <Settings id={'settings'} thumbsNeed={settings.thumbs} go={this.go}
+                          setActiveModal={this.setActiveUserProfileModal}/>
             </View>
         </Epic>
     }

@@ -5,10 +5,10 @@ import Icon28BrainOutline from '@vkontakte/icons/dist/28/brain_outline';
 import Icon28PaletteOutline from '@vkontakte/icons/dist/28/palette_outline';
 import CreateReportModalPage from "./CreateReportModalPage";
 import Icon28PrivacyOutline from '@vkontakte/icons/dist/28/privacy_outline';
+import Icon28ErrorOutline from '@vkontakte/icons/dist/28/error_outline';
 
 import IconCoolEmoji from '../img/cool-emoji.png';
 import CreatePostModal from "./CreatePostModal";
-import * as Sentry from "@sentry/browser";
 import CreatePostsCategoriesSelectModal from "./CreatePostsCategoriesSelectModal";
 
 function goToPublicMessages() {
@@ -20,8 +20,8 @@ function goToPublicMessages() {
 
 export default function ({
                              activeProfileModal, setActiveUserProfileModal,
-                             changeBugTitle, changeBugSubTitle, sendBugReport, fetchedUser
-                         }, props) {
+                             changeBugTitle, changeBugSubTitle, sendBugReport
+                         }) {
     return <ModalRoot activeModal={activeProfileModal} onClose={() => setActiveUserProfileModal(null)}>
         <ModalCard id={'level_help'} onClose={() => setActiveUserProfileModal(null)}
                    header={"Уровень"} caption={`Когда ты лайкаешь арты ты по-немногу повышаешь свой уровень, 
@@ -66,7 +66,7 @@ export default function ({
                    ]}/>
         <ModalCard id={'bug_sender_done'} onClose={() => setActiveUserProfileModal(null)}
                    header={'Баг пойман!'}
-                   icon={<img width={100} src={IconCoolEmoji}/>}
+                   icon={<img alt={'cool emoji icon'} width={100} src={IconCoolEmoji}/>}
                    caption={`Спасибо, теперь мы сможем сделать приложение еще лучше!`}
                    actions={[{
                        title: 'Круто!', mode: 'primary',
@@ -88,6 +88,35 @@ export default function ({
                        }
                    }, {
                        title: 'Попытать удачу', mode: 'secondary',
+                       action: () => {
+                           setActiveUserProfileModal(null)
+                           goToPublicMessages()
+                       }
+                   }
+                   ]}/>
+        <ModalCard id={'success_create_post'} onClose={() => setActiveUserProfileModal(null)}
+                   header={"Отлично!"} caption={`Ты создал новый пост, крутяк! Теперь осталось подождать пока его
+                   проверят
+                        `}
+                   icon={<img alt={'cool emoji icon'} width={100} src={IconCoolEmoji}/>}
+                   actions={[{
+                       title: 'Окей', mode: 'primary',
+                       action: () => {
+                           setActiveUserProfileModal(null);
+                       }
+                   }
+                   ]}/>
+        <ModalCard id={'error_save_art'} onClose={() => setActiveUserProfileModal(null)}
+                   header={"Упс!"} caption={`Что-то пошло не так, попробуй позже. Если так и дальше продолжиться
+                   обратись к администратору`}
+                   icon={<Icon28ErrorOutline style={{color: "#fd5f5f"}}/>}
+                   actions={[{
+                       title: 'Окей', mode: 'primary',
+                       action: () => {
+                           setActiveUserProfileModal(null);
+                       }
+                   }, {
+                       title: 'За помощью', mode: 'secondary',
                        action: () => {
                            setActiveUserProfileModal(null)
                            goToPublicMessages()

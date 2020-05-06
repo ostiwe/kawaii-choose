@@ -12,8 +12,9 @@ const CategoriesGroupCardScrolls = ({
                                         artsList,
                                         postAction,
                                         openImage,
-                                        changePanel
-                                    }, props) => {
+                                        changePanel,
+                                        thumbsNeed
+                                    }) => {
     return (
         categories.map(category => {
             if (artsList[category.id] !== undefined && artsList[category.id].length > 0) {
@@ -38,7 +39,7 @@ const CategoriesGroupCardScrolls = ({
                                 </Card> :
                                 <Card data-postid={item.postid} key={item.local_filename} mode={'shadow'}>
                                     <div className={'home-card home-card__image cart-with-controls'} style={{
-                                        backgroundImage: `url(https://api.ostiwe.ru/file/${item.local_filename}?thumb=1)`,
+                                        backgroundImage: `url(https://api.ostiwe.ru/file/${item.local_filename}?thumb=${thumbsNeed})`,
                                     }}/>
                                     <div className="cart-controls">
                                         {!item.liked ?

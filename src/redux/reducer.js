@@ -12,6 +12,9 @@ const initialState = {
     bug_info: null,
     create_post_categories: [],
     create_post_file: null,
+    settings: {
+        thumbs: 1,
+    }
 
 };
 
@@ -67,6 +70,20 @@ export function appReducer(state = initialState, action) {
             return {
                 ...state,
                 create_post_file: action.payload
+            }
+        case "CREATE_POST_CLEAR":
+            return {
+                ...state,
+                create_post_categories: [],
+                create_post_file: null
+            }
+        case "CHANGE_SETTINGS_THUMBS":
+            return {
+                ...state,
+                settings: {
+                    ...state.settings,
+                    thumbs: action.payload
+                }
             }
         default:
             return state;
