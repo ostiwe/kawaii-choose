@@ -1,7 +1,12 @@
+* {
+  white-space: normal;
+}
+
 .arts-grid {
   &__wrapper {
     margin: 0 auto;
     height: auto !important;
+
     &_ {
       padding: 10px;
     }

@@ -1,3 +1,7 @@
+* {
+  white-space: normal;
+}
+
 .arts-grid__wrapper {
   margin: 0 auto;
   height: auto !important;

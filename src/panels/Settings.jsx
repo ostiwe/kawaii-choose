@@ -1,6 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
-import {Cell, Group, Header, IOS, List, Panel, PanelHeaderSimple, platform, Switch} from "@vkontakte/vkui";
+import {Cell, Group, Header, IOS, List, Panel, PanelHeaderSimple, platform, SimpleCell, Switch} from "@vkontakte/vkui";
 import PanelHeaderButton from "@vkontakte/vkui/dist/components/PanelHeaderButton/PanelHeaderButton";
 import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
 import Icon24Back from '@vkontakte/icons/dist/24/back';
@@ -34,11 +34,11 @@ class Settings extends React.Component {
                         <Icon24Back/>} </PanelHeaderButton>}>Настройки</PanelHeaderSimple>
                 <Group header={<Header mode="secondary">Контент</Header>}>
                     <List>
-                        <Cell size={"l"} description={<div>
+                        <SimpleCell description={<div>
                             Для миниатюр артов будут
                             использоваться {thumbsNeed ? "сжатые изображения" : "изображения с полным размером"}
-                        </div>} indicator={<Switch checked={thumbsNeed} onChange={this.changeThumbs}/>}>Экономия
-                            трафика</Cell>
+                        </div>} disabled after={<Switch checked={thumbsNeed} onChange={this.changeThumbs}/>}>Экономия
+                            трафика</SimpleCell>
                     </List>
                 </Group>
             </Panel>
